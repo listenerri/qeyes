@@ -1,8 +1,11 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+// QCursor must be include before X.h (XInput2.h)
+#include <QCursor>
 #include <QString>
 #include <QDebug>
+
 #include <X11/extensions/XInput2.h>
 
 /* Return 1 if XI2 is available, 0 otherwise */

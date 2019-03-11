@@ -1,11 +1,7 @@
 #include "cursorpostionmonitor.h"
 #include "common.h"
 
-#include <QCursor>
 #include <QDebug>
-
-#include <X11/Xlib.h>
-
 
 CursorPostionMonitor::CursorPostionMonitor(QObject *parent) : QObject(parent)
 {
