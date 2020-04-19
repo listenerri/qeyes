@@ -15,7 +15,13 @@ set(CMAKE_INSTALL_PREFIX /usr)
 #add_subdirectory("plugins")
 
 # Sources files
-file(GLOB SRCS "*.h" "*.cpp")
+set(SRCS main.cpp
+    common.h
+    qeyes.h
+    qeyes.cpp
+    cursorpostionmonitor.h
+    cursorpostionmonitor.cpp
+)
 
 # Find the library
 find_package(PkgConfig REQUIRED)
