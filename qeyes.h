@@ -1,11 +1,12 @@
 #ifndef QEYES_H
 #define QEYES_H
 
-#include "cursorpostionmonitor.h"
-
 #include <QWidget>
-
-class QLabel;
+#include <QProcess>
+#include <QWindow>
+#include <QVBoxLayout>
+#include <QTimer>
+#include <QPointer>
 
 class QEyes : public QWidget
 {
@@ -15,18 +16,25 @@ public:
     QEyes(QWidget *parent = 0);
     ~QEyes();
 
-protected:
-    void paintEvent(QPaintEvent *event) override;
+public:
+    virtual QSize sizeHint() const Q_DECL_OVERRIDE;
 
 private slots:
-    void onCursorMoved(const QPoint &newPos);
+    void startXeyesProcess();
+    void onXeyesProcessError(QProcess::ProcessError err);
+    void embedXeyesWindow();
 
 private:
-    QLabel *m_label;
-    CursorPostionMonitor *m_monitor;
-    QThread *m_thread;
+    void initConnection();
+    bool xeyesCmdExists();
+    WId getXeyesWID();
+    void removeContainer();
 
-    QPoint m_cursorPos;
+private:
+    QVBoxLayout *m_mainVBoxLayout;
+    QProcess *m_xeyesProcess;
+    QPointer<QWidget> m_container;
+    QTimer *m_embedDelayTimer;
 };
 
 #endif // QEYES_H

@@ -1,78 +1,121 @@
 #include "qeyes.h"
 
-#include <QLabel>
-#include <QApplication>
-#include <QThread>
-#include <QHBoxLayout>
-#include <QPainter>
+#include <QFile>
+#include <QDebug>
 
-#define MyWidth 80
-#define MyHeight 60
-#define MyPadding 5
+#define MyWidth 180
+#define MyHeight 140
+#define XeyesFilePath "/usr/bin/xeyes"
 
 QEyes::QEyes(QWidget *parent)
     : QWidget(parent)
-    , m_label(new QLabel(this))
-    , m_monitor(new CursorPostionMonitor)
-    , m_thread(new QThread(this))
+    , m_mainVBoxLayout(new QVBoxLayout(this))
+    , m_xeyesProcess(new QProcess(this))
+    , m_container(nullptr)
+    , m_embedDelayTimer(new QTimer(this))
 {
-    setFixedSize(MyWidth, MyHeight);
+    m_embedDelayTimer->setSingleShot(true);
+    m_embedDelayTimer->setInterval(500);
 
-    m_label->setText("hello");
+    initConnection();
 
-    QHBoxLayout *hbLayout = new QHBoxLayout(this);
-    hbLayout->addWidget(m_label);
-    setLayout(hbLayout);
-
-    m_monitor->moveToThread(m_thread);
-
-    connect(m_monitor, &CursorPostionMonitor::failed, this, [=] {
-        qApp->exit(-1);
-    });
-    connect(m_monitor, &CursorPostionMonitor::cursorMoved, this, &QEyes::onCursorMoved);
-    connect(m_thread, &QThread::started, m_monitor, &CursorPostionMonitor::startMonitor);
-
-    m_thread->start();
+    QTimer::singleShot(0, this, &QEyes::startXeyesProcess);
 }
 
 QEyes::~QEyes()
 {
-
+    m_xeyesProcess->kill();
 }
 
-void QEyes::paintEvent(QPaintEvent *event)
+QSize QEyes::sizeHint() const
 {
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::HighQualityAntialiasing);
-
-    painter.fillRect(rect(), Qt::red);
-
-    QPen pen;
-    pen.setWidth(3);
-    pen.setColor(Qt::black);
-    painter.setPen(pen);
-
-    QRect rLeft = rect();
-    rLeft.setRight(rLeft.width() / 2);
-    rLeft = rLeft.marginsRemoved(QMargins(MyPadding, MyPadding, MyPadding, MyPadding));
-    QPainterPath pathLeft;
-    pathLeft.addEllipse(rLeft);
-    painter.fillPath(pathLeft, Qt::white);
-    painter.drawEllipse(rLeft);
-
-
-    QRect rRight = rect();
-    rRight.setLeft(rRight.width() / 2);
-    rRight = rRight.marginsRemoved(QMargins(MyPadding, MyPadding, MyPadding, MyPadding));
-    QPainterPath pathRight;
-    pathRight.addEllipse(rRight);
-    painter.fillPath(pathRight, Qt::white);
-    painter.drawEllipse(rRight);
+    return QSize(MyWidth, MyHeight);
 }
 
-void QEyes::onCursorMoved(const QPoint &newPos)
+void QEyes::startXeyesProcess()
 {
-    m_cursorPos = newPos;
-    m_label->setText(QString("x:%1 y:%2").arg(newPos.x()).arg(newPos.y()));
-    update();
+    if (!xeyesCmdExists()) {
+        qDebug() << "The xeyes cmd is not exists";
+        return;
+    }
+    if (m_xeyesProcess->state() != QProcess::ProcessState::NotRunning) {
+        qDebug() << "The xeyes process is staring or running";
+        return;
+    }
+    QStringList args = {"-geometry", "1x2+3+4"};
+    m_xeyesProcess->setProgram(XeyesFilePath);
+    m_xeyesProcess->setArguments(args);
+    m_xeyesProcess->start();
+}
+
+void QEyes::onXeyesProcessError(QProcess::ProcessError err)
+{
+    qDebug() << "Xeyes process error occurred: " << err;
+    removeContainer();
+}
+
+void QEyes::embedXeyesWindow()
+{
+    // call timer's start function instead of call this directly
+    if (sender() != m_embedDelayTimer) {
+        qDebug() << "Do not call embed function directly";
+        return;
+    }
+
+    const WId id = getXeyesWID();
+    if (id == 0) {
+        qDebug() << "Not find the xeyes WId";
+        return;
+    }
+    removeContainer();
+    QWindow *xeyesWindow = QWindow::fromWinId(id);
+    m_container = QWidget::createWindowContainer(xeyesWindow, this);
+    if (!m_container) {
+        qDebug() << "Embed xeyes window failed";
+    }
+    m_mainVBoxLayout->addWidget(m_container);
+}
+
+void QEyes::initConnection()
+{
+    connect(m_xeyesProcess, SIGNAL(started()), m_embedDelayTimer, SLOT(start()));
+    connect(m_xeyesProcess, SIGNAL(finished(int)), this, SLOT(startXeyesProcess()));
+    connect(m_xeyesProcess, SIGNAL(errorOccurred(QProcess::ProcessError)),
+            this, SLOT(onXeyesProcessError(QProcess::ProcessError)));
+    connect(m_embedDelayTimer, SIGNAL(timeout()), this, SLOT(embedXeyesWindow()));
+}
+
+bool QEyes::xeyesCmdExists()
+{
+    return QFile::exists(XeyesFilePath);
+}
+
+WId QEyes::getXeyesWID()
+{
+    QProcess *findExeysWIdProcess = new QProcess(this);
+    QStringList args = {"-root", "-tree"};
+    findExeysWIdProcess->setProgram("/usr/bin/xwininfo");
+    findExeysWIdProcess->setArguments(args);
+    findExeysWIdProcess->start();
+    findExeysWIdProcess->waitForFinished();
+    const QString &data = findExeysWIdProcess->readAll();
+    for (const QString &line : data.split("\n")) {
+        if (line.contains("xeyes") && line.contains("1x2+0+0") && line.contains("+3+4")) {
+            const QString widStr = line.trimmed().split(" ").first();
+            bool ok;
+            WId id = widStr.toUInt(&ok, 16);
+            if (ok) {
+                return id;
+            }
+        }
+    }
+    return 0;
+}
+
+void QEyes::removeContainer()
+{
+    if (m_container) {
+        m_container->deleteLater();
+        m_mainVBoxLayout->removeWidget(m_container);
+    }
 }
