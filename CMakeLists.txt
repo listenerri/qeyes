@@ -12,8 +12,6 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_FLAGS "-g -Wall")
 set(CMAKE_INSTALL_PREFIX /usr)
 
-#add_subdirectory("plugins")
-
 # Sources files
 set(SRCS main.cpp
     common.h
@@ -49,6 +47,8 @@ target_link_libraries(${BIN_NAME} PUBLIC
     ${X11_LIBRARIES}
     ${XI_LIBRARIES}
 )
+
+add_subdirectory("dde-dock-qeyes-plugin")
 
 # bin
 install(TARGETS ${BIN_NAME} DESTINATION bin)

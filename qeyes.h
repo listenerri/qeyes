@@ -18,6 +18,7 @@ public:
 
 public:
     virtual QSize sizeHint() const Q_DECL_OVERRIDE;
+    void setPreferSize(const QSize &preferSize);
 
 private slots:
     void startXeyesProcess();
@@ -35,6 +36,8 @@ private:
     QProcess *m_xeyesProcess;
     QPointer<QWidget> m_container;
     QTimer *m_embedDelayTimer;
+
+    QSize m_preferSize;
 };
 
 #endif // QEYES_H

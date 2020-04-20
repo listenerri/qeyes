@@ -2,9 +2,10 @@
 
 #include <QFile>
 #include <QDebug>
+#include <QResizeEvent>
 
-#define MyWidth 180
-#define MyHeight 140
+#define MyPreferWidth 180
+#define MyPreferHeight 140
 #define XeyesFilePath "/usr/bin/xeyes"
 
 QEyes::QEyes(QWidget *parent)
@@ -13,6 +14,7 @@ QEyes::QEyes(QWidget *parent)
     , m_xeyesProcess(new QProcess(this))
     , m_container(nullptr)
     , m_embedDelayTimer(new QTimer(this))
+    , m_preferSize(QSize(MyPreferWidth, MyPreferHeight))
 {
     m_embedDelayTimer->setSingleShot(true);
     m_embedDelayTimer->setInterval(500);
@@ -29,7 +31,8 @@ QEyes::~QEyes()
 
 QSize QEyes::sizeHint() const
 {
-    return QSize(MyWidth, MyHeight);
+    qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>sizehint" << m_preferSize;
+    return m_preferSize;
 }
 
 void QEyes::startXeyesProcess()
@@ -118,4 +121,9 @@ void QEyes::removeContainer()
         m_container->deleteLater();
         m_mainVBoxLayout->removeWidget(m_container);
     }
+}
+
+void QEyes::setPreferSize(const QSize &preferSize)
+{
+    m_preferSize = preferSize;
 }
