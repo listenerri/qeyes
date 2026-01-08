@@ -1,0 +1,47 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "qt-5.15.2-msvc2019",
+            "inherits": "qt",
+            "hidden": true,
+            "environment": {
+                "QTDIR": "C:/Qt/5.15.2/msvc2019"
+            },
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "cl.exe",
+                "CMAKE_CXX_COMPILER": "cl.exe"
+            },
+            "toolset": {
+                "strategy": "external",
+                "value": "v142,host=x86"
+            },
+            "architecture": {
+                "strategy": "external",
+                "value": "x86"
+            }
+        },
+        {
+            "name": "qt-current-using",
+            "inherits": "qt-5.15.2-msvc2019",
+            "hidden": true
+        },
+        {
+            "name": "qt-debug",
+            "inherits": "qt-current-using",
+            "binaryDir": "${sourceDir}/build/debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "qt-release",
+            "inherits": "qt-current-using",
+            "binaryDir": "${sourceDir}/build/release",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        }
+    ]
+}

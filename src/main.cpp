@@ -1,11 +1,13 @@
-#include "qeyes.h"
 #include <QApplication>
+#include "EyesTrayIcon.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    QEyes w;
-    w.show();
-
+    
+    a.setQuitOnLastWindowClosed(false);
+    
+    EyesTrayIcon eyesTray;
+    
     return a.exec();
 }

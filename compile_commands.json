@@ -1,0 +1,20 @@
+[
+{
+  "directory": "C:/Users/ri/code/qt/qeyes/build/cmake-build-win32-x86-MSVC-17.14.36811.4-Debug",
+  "command": "C:\\PROGRA~1\\MICROS~4\\2022\\COMMUN~1\\VC\\Tools\\MSVC\\1444~1.352\\bin\\Hostx86\\x86\\cl.exe  /nologo /TP -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -IC:\\Users\\ri\\code\\qt\\qeyes\\build\\cmake-build-win32-x86-MSVC-17.14.36811.4-Debug\\qeyes_autogen\\include -IC:\\Users\\ri\\code\\qt\\qeyes -external:IC:\\Qt\\5.15.2\\msvc2019\\include -external:IC:\\Qt\\5.15.2\\msvc2019\\include\\QtWidgets -external:IC:\\Qt\\5.15.2\\msvc2019\\include\\QtGui -external:IC:\\Qt\\5.15.2\\msvc2019\\include\\QtANGLE -external:IC:\\Qt\\5.15.2\\msvc2019\\include\\QtCore -external:IC:\\Qt\\5.15.2\\msvc2019\\.\\mkspecs\\win32-msvc -external:W0 /DWIN32 /D_WINDOWS /W3 /GR /EHsc -DQT_QML_DEBUG -DQT_DECLARATIVE_DEBUG /MDd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\qeyes.dir\\qeyes_autogen\\mocs_compilation.cpp.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\ri\\code\\qt\\qeyes\\build\\cmake-build-win32-x86-MSVC-17.14.36811.4-Debug\\qeyes_autogen\\mocs_compilation.cpp",
+  "file": "C:\\Users\\ri\\code\\qt\\qeyes\\build\\cmake-build-win32-x86-MSVC-17.14.36811.4-Debug\\qeyes_autogen\\mocs_compilation.cpp",
+  "output": "CMakeFiles\\qeyes.dir\\qeyes_autogen\\mocs_compilation.cpp.obj"
+},
+{
+  "directory": "C:/Users/ri/code/qt/qeyes/build/cmake-build-win32-x86-MSVC-17.14.36811.4-Debug",
+  "command": "C:\\PROGRA~1\\MICROS~4\\2022\\COMMUN~1\\VC\\Tools\\MSVC\\1444~1.352\\bin\\Hostx86\\x86\\cl.exe  /nologo /TP -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -IC:\\Users\\ri\\code\\qt\\qeyes\\build\\cmake-build-win32-x86-MSVC-17.14.36811.4-Debug\\qeyes_autogen\\include -IC:\\Users\\ri\\code\\qt\\qeyes -external:IC:\\Qt\\5.15.2\\msvc2019\\include -external:IC:\\Qt\\5.15.2\\msvc2019\\include\\QtWidgets -external:IC:\\Qt\\5.15.2\\msvc2019\\include\\QtGui -external:IC:\\Qt\\5.15.2\\msvc2019\\include\\QtANGLE -external:IC:\\Qt\\5.15.2\\msvc2019\\include\\QtCore -external:IC:\\Qt\\5.15.2\\msvc2019\\.\\mkspecs\\win32-msvc -external:W0 /DWIN32 /D_WINDOWS /W3 /GR /EHsc -DQT_QML_DEBUG -DQT_DECLARATIVE_DEBUG /MDd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\qeyes.dir\\CMakeFiles\\3.28.1\\CompilerIdCXX\\CMakeCXXCompilerId.cpp.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\ri\\code\\qt\\qeyes\\build\\cmake-build-win32-x86-MSVC-17.14.36811.4-Debug\\CMakeFiles\\3.28.1\\CompilerIdCXX\\CMakeCXXCompilerId.cpp",
+  "file": "C:\\Users\\ri\\code\\qt\\qeyes\\build\\cmake-build-win32-x86-MSVC-17.14.36811.4-Debug\\CMakeFiles\\3.28.1\\CompilerIdCXX\\CMakeCXXCompilerId.cpp",
+  "output": "CMakeFiles\\qeyes.dir\\CMakeFiles\\3.28.1\\CompilerIdCXX\\CMakeCXXCompilerId.cpp.obj"
+},
+{
+  "directory": "C:/Users/ri/code/qt/qeyes/build/cmake-build-win32-x86-MSVC-17.14.36811.4-Debug",
+  "command": "C:\\PROGRA~1\\MICROS~4\\2022\\COMMUN~1\\VC\\Tools\\MSVC\\1444~1.352\\bin\\Hostx86\\x86\\cl.exe  /nologo /TP -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -IC:\\Users\\ri\\code\\qt\\qeyes\\build\\cmake-build-win32-x86-MSVC-17.14.36811.4-Debug\\qeyes_autogen\\include -IC:\\Users\\ri\\code\\qt\\qeyes -external:IC:\\Qt\\5.15.2\\msvc2019\\include -external:IC:\\Qt\\5.15.2\\msvc2019\\include\\QtWidgets -external:IC:\\Qt\\5.15.2\\msvc2019\\include\\QtGui -external:IC:\\Qt\\5.15.2\\msvc2019\\include\\QtANGLE -external:IC:\\Qt\\5.15.2\\msvc2019\\include\\QtCore -external:IC:\\Qt\\5.15.2\\msvc2019\\.\\mkspecs\\win32-msvc -external:W0 /DWIN32 /D_WINDOWS /W3 /GR /EHsc -DQT_QML_DEBUG -DQT_DECLARATIVE_DEBUG /MDd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\qeyes.dir\\main.cpp.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\ri\\code\\qt\\qeyes\\main.cpp",
+  "file": "C:\\Users\\ri\\code\\qt\\qeyes\\main.cpp",
+  "output": "CMakeFiles\\qeyes.dir\\main.cpp.obj"
+}
+]
