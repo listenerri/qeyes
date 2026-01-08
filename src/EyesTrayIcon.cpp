@@ -20,6 +20,9 @@ EyesTrayIcon::EyesTrayIcon(QObject *parent) : QObject(parent)
     m_trayIcon->setContextMenu(trayMenu);
     m_trayIcon->setToolTip("QEyes - Eyes Follow Cursor");
     
+    // 连接激活信号，支持左键和右键点击都显示菜单
+    connect(m_trayIcon, &QSystemTrayIcon::activated, this, &EyesTrayIcon::onTrayIconActivated);
+    
     m_timer = new QTimer(this);
     connect(m_timer, &QTimer::timeout, this, &EyesTrayIcon::updateEyes);
     m_timer->start(50);
@@ -86,4 +89,13 @@ void EyesTrayIcon::drawEye(QPainter *painter, const QPointF &eyePos, const QPoin
     
     painter->setBrush(Qt::white);
     painter->drawEllipse(QPointF(pupilPos.x() - 1.5, pupilPos.y() - 1.5), 1.5, 1.5);
+}
+
+void EyesTrayIcon::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
+{
+    // 当左键单击或中键点击托盘图标时显示菜单
+    if (reason == QSystemTrayIcon::Trigger || reason == QSystemTrayIcon::MiddleClick)
+    {
+        m_trayIcon->contextMenu()->popup(QCursor::pos());
+    }
 }

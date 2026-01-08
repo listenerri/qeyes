@@ -17,6 +17,7 @@ public:
 
 private slots:
     void updateEyes();
+    void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
 
 private:
     void drawEye(QPainter *painter, const QPointF &eyePos, const QPoint &cursorPos, const QPoint &eyeCenter);
