@@ -20,7 +20,7 @@ EyesTrayIcon::EyesTrayIcon(QObject *parent) : QObject(parent)
     m_trayIcon->setContextMenu(trayMenu);
     m_trayIcon->setToolTip("QEyes - Eyes Follow Cursor");
     
-    // 连接激活信号，支持左键和右键点击都显示菜单
+    // Connect activation signal to handle both left and right click to show menu
     connect(m_trayIcon, &QSystemTrayIcon::activated, this, &EyesTrayIcon::onTrayIconActivated);
     
     m_timer = new QTimer(this);
@@ -36,11 +36,11 @@ void EyesTrayIcon::updateEyes()
 {
     QPoint cursorPos = QCursor::pos();
     
-    // 获取托盘图标的实际位置
+    // Get the actual position of the tray icon
     QRect trayGeometry = m_trayIcon->geometry();
     QPoint trayCenter = trayGeometry.center();
     
-    // 如果托盘图标位置无效，使用屏幕右下角作为默认位置
+    // If tray icon position is invalid, use bottom-right corner of screen as default
     if (trayGeometry.isNull() || !trayGeometry.isValid())
     {
         QScreen *screen = QApplication::primaryScreen();
@@ -71,12 +71,12 @@ void EyesTrayIcon::drawEye(QPainter *painter, const QPointF &eyePos, const QPoin
     const double eyeRadiusY = 34.0;
     const double pupilRadius = 15.0;
     
-    // 绘制眼白
+    // Draw sclera (white of the eye)
     painter->setBrush(Qt::white);
     painter->setPen(QPen(Qt::black, 5.0));
     painter->drawEllipse(eyePos, eyeRadiusX, eyeRadiusY);
     
-    // 计算从眼睛到鼠标的方向
+    // Calculate direction from eye to mouse cursor
     double dx = cursorPos.x() - eyeCenter.x();
     double dy = cursorPos.y() - eyeCenter.y();
     double distance = std::sqrt(dx * dx + dy * dy);
@@ -84,23 +84,23 @@ void EyesTrayIcon::drawEye(QPainter *painter, const QPointF &eyePos, const QPoin
     QPointF pupilPos = eyePos;
     if (distance > 0.1)
     {
-        // 归一化方向向量
+        // Normalize direction vector
         double dirX = dx / distance;
         double dirY = dy / distance;
         
-        // 椭圆眼睛中瞳孔的最大偏移量
-        // 对于椭圆形眼睛，瞳孔在不同方向上的最大移动距离不同
-        // 使用椭圆的参数方程来计算最大偏移
-        double maxOffsetX = eyeRadiusX - pupilRadius - 2.0; // 留一点边距
-        double maxOffsetY = eyeRadiusY - pupilRadius - 2.0; // 留一点边距
+        // Maximum pupil offset in elliptical eye
+        // For elliptical eyes, the maximum movement distance differs in different directions
+        // Use ellipse parametric equations to calculate maximum offset
+        double maxOffsetX = eyeRadiusX - pupilRadius - 2.0; // Leave some margin
+        double maxOffsetY = eyeRadiusY - pupilRadius - 2.0; // Leave some margin
         
-        // 计算瞳孔在椭圆约束下的位置
-        // 使用缩放因子来确保瞳孔不会超出眼白边界
+        // Calculate pupil position constrained by ellipse
+        // Use scaling factor to ensure pupil stays within the sclera
         double offsetX = dirX * maxOffsetX;
         double offsetY = dirY * maxOffsetY;
         
-        // 限制瞳孔在椭圆内部
-        // 使用椭圆方程: (x/a)^2 + (y/b)^2 <= 1
+        // Constrain pupil inside ellipse
+        // Using ellipse equation: (x/a)^2 + (y/b)^2 <= 1
         double scale = std::sqrt((offsetX * offsetX) / (maxOffsetX * maxOffsetX) + 
                                   (offsetY * offsetY) / (maxOffsetY * maxOffsetY));
         if (scale > 1.0)
@@ -113,19 +113,19 @@ void EyesTrayIcon::drawEye(QPainter *painter, const QPointF &eyePos, const QPoin
         pupilPos.setY(eyePos.y() + offsetY);
     }
     
-    // 绘制瞳孔
+    // Draw pupil
     painter->setBrush(Qt::black);
     painter->setPen(Qt::NoPen);
     painter->drawEllipse(pupilPos, pupilRadius, pupilRadius);
     
-    // 绘制高光
+    // Draw highlight
     painter->setBrush(Qt::white);
     painter->drawEllipse(QPointF(pupilPos.x() - 5, pupilPos.y() - 5), 4, 4);
 }
 
 void EyesTrayIcon::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
 {
-    // 当左键单击或中键点击托盘图标时显示菜单
+    // Show menu when left-clicking or middle-clicking on tray icon
     if (reason == QSystemTrayIcon::Trigger || reason == QSystemTrayIcon::MiddleClick)
     {
         m_trayIcon->contextMenu()->popup(QCursor::pos());
